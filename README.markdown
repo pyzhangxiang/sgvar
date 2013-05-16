@@ -23,7 +23,7 @@ if(parser.fail())
 ##### serialize to json #####
 
 ```cpp
-doc.toJson()
+std::string json_str = doc.toJson();
 ```
 
 Then you can save the json string to a file.
