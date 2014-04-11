@@ -666,6 +666,24 @@ const sgVar & sgVar::operator[]( size_t index ) const
     
 }
 
+void sgVar::push_back(const sgVar &val)
+{
+    if(mDataType != T_ARRAY && mDataType != T_NULL)
+    {
+        assert(0);
+    }
+
+    mDataType = T_ARRAY;
+
+    array_type *mArray = (array_type*)mData;
+    if(!mArray)
+    {
+        mArray = new array_type;
+        mData = mArray;
+    }
+    mArray->push_back(val);
+}
+
 sgVar::string_type sgVar::toString( void ) const
 {
     if(mDataType == T_NULL || !mData)

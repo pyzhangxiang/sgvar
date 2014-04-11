@@ -94,6 +94,8 @@ public:
 	const sgVar &operator[](const string_type &key) const;
 	const sgVar &operator[](size_t index) const;
 
+    void push_back(const sgVar &val);
+
     string_type toString(void) const;
     bool toBool(void) const;
     int_type toInt(void) const;
