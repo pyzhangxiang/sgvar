@@ -51,7 +51,7 @@ protected:
 	sgVar parseMap(std::istream &in);
 	sgVar parseArray(std::istream &in);
 	sgVar parseValue(std::istream &in);
-	// start should be ' or "
+	// should start with ' or "
 	sgVar parseString(std::istream &in, char start);
 
 };

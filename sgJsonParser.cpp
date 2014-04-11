@@ -25,7 +25,27 @@ sgVar sgJsonParser::parse( const std::string &filename )
 		return sgVar();
 	}
 
-	return parse(in);
+    // get length of file:
+    in.seekg (0, in.end);
+    int length = in.tellg();
+    in.seekg (0, in.beg);
+
+    // allocate memory:
+    char * buffer = new char[length];
+
+    // read data as a block:
+    in.read (buffer,length);
+    in.close();
+
+    std::stringstream ss;
+    ss << buffer;
+    delete []buffer;
+
+	sgVar ret = parse(ss);
+
+    
+
+    return ret;
 }
 
 sgVar sgJsonParser::parse( std::istream &in )
@@ -151,7 +171,7 @@ sgVar sgJsonParser::parseArray( std::istream &in )
 			{
 				throw sgJsonException("Expected ',' before parsing value in array");
 			}
-			in.seekg(-1, std::ios_base::cur);
+			in.seekg(-1, in.cur);
 			var[var.size()] = parseValue(in);
 			askForComma = true;
 		}
@@ -186,8 +206,7 @@ sgVar sgJsonParser::parseValue( std::istream &in )
 		else if(ch == ',' || ch == ']' || ch == '}')
 		{
 			// end value, seek back 
-			in.seekg(-1, std::ios_base::cur);
-
+			in.seekg(-1, in.cur);
 			std::string bl = ss.str();
 			if(bl == "true")
 			{
