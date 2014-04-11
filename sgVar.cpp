@@ -142,6 +142,13 @@ void sgVar::_initInt( int_type v )
         mDataType = T_INT;
 }
 
+void sgVar::_initInt64( int64_type v )
+{
+    mData = internal::data_cpy(v);
+    if(mData)
+        mDataType = T_INT64;
+}
+
 void sgVar::_initFloat(float_type v)
 {
     mData = internal::data_cpy(v);
@@ -266,7 +273,7 @@ sgVar::sgVar( long long v )
 , _ref_count(0)
 {
     _increase_ref();
-    _initInt(v);
+    _initInt64(v);
 }
 
 sgVar::sgVar( unsigned long long v )
@@ -275,7 +282,7 @@ sgVar::sgVar( unsigned long long v )
 , _ref_count(0)
 {
     _increase_ref();
-    _initInt(v);
+    _initInt64(v);
 }
 
 sgVar::sgVar( float v )
@@ -457,7 +464,7 @@ sgVar & sgVar::operator=( long long v )
         _ref_count = 0;
     }
     _increase_ref();
-    _initInt(v);
+    _initInt64(v);
 
     return *this;
 }
@@ -469,7 +476,7 @@ sgVar & sgVar::operator=( unsigned long long v )
         _ref_count = 0;
     }
     _increase_ref();
-    _initInt(v);
+    _initInt64(v);
 
     return *this;
 }
@@ -682,7 +689,12 @@ sgVar::string_type sgVar::toString( void ) const
         }
     case T_INT:
         {
-            return internal::tostring(*((long long*)mData));
+            return internal::tostring(*((int_type*)mData));
+            break;
+        }
+    case T_INT64:
+        {
+            return internal::tostring(*((int64_type*)mData));
             break;
         }
     case T_STRING:
@@ -704,6 +716,8 @@ bool sgVar::toBool( void ) const
 		 return *((bool*)mData);
 	else if(mDataType == T_INT)
 		return *((int_type*)mData) != 0;
+    else if(mDataType == T_INT64)
+        return *((int64_type*)mData) != 0;
 	else if(mDataType == T_FLOAT)
 		return *((float_type*)mData) != 0;
 	else
@@ -718,12 +732,28 @@ sgVar::int_type sgVar::toInt( void ) const
 {
     if(mDataType == T_INT)
 	    return *((int_type*)mData);
+    else if(mDataType == T_INT64)
+        return (int_type)(*((int64_type*)mData));
 	else if(mDataType == T_FLOAT)
 		return (int_type)_sgVar_REAL_FLOAT((*(float_type*)mData));
 	else if(mDataType == T_BOOL)
 		return (int_type)(*(bool*)mData);
 	else
 		return 0;
+}
+
+sgVar::int64_type sgVar::ToInt64( void ) const
+{
+    if(mDataType == T_INT64)
+        return *((int64_type*)mData);
+    else if(mDataType == T_INT)
+        return (int64_type)(*((int_type*)mData));
+    else if(mDataType == T_FLOAT)
+        return (int64_type)_sgVar_REAL_FLOAT((*(float_type*)mData));
+    else if(mDataType == T_BOOL)
+        return (int64_type)(*(bool*)mData);
+    else
+        return 0;
 }	
 
 sgVar::float_type sgVar::toFloat( void ) const
@@ -732,6 +762,8 @@ sgVar::float_type sgVar::toFloat( void ) const
 		return (*((float_type*)mData));
 	else if(mDataType == T_INT)
 		return (float_type)(*(int_type*)mData);
+    else if(mDataType == T_INT64)
+        return (float_type)(*((int64_type*)mData));
 	else if(mDataType == T_BOOL)
 		return (float_type)(*(bool*)mData);
 	else

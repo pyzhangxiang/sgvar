@@ -11,7 +11,8 @@ class sgVar
 {
 public:
     typedef std::string string_type;
-    typedef long long int_type;
+    typedef long int_type;
+    typedef long long int64_type;
     typedef double float_type;
     typedef std::vector<sgVar> array_type;
     typedef std::map<string_type, sgVar> map_type;
@@ -25,6 +26,7 @@ private:
         T_BOOL='B', 
         T_FLOAT='F',
         T_INT='I',  
+        T_INT64='L',
         T_STRING='S',
         T_MAP='M',  
         T_ARRAY='A',
@@ -43,6 +45,7 @@ private:
     size_t _count_ref(void) const;
 
     void _initInt(int_type v);
+    void _initInt64(int64_type v);
     void _initFloat(float_type v);
 public:
     ~sgVar(void);
@@ -94,6 +97,7 @@ public:
     string_type toString(void) const;
     bool toBool(void) const;
     int_type toInt(void) const;
+    int64_type ToInt64(void) const;
     float_type toFloat(void) const; 
     string_type toJson(bool formatted = false, char quote = '\'', size_t level = 0) const;  
 
@@ -101,6 +105,7 @@ public:
     bool isString(void) const{ return mDataType == T_STRING; }
     bool isBool(void) const{ return mDataType == T_BOOL; }
     bool isInt(void) const{ return mDataType == T_INT; }
+    bool IsInt64(void) const{ return mDataType == T_INT64; }
     bool isFloat(void) const{ return mDataType == T_FLOAT; }
     bool isArray(void) const{ return mDataType == T_ARRAY; }
     bool isMap(void) const{ return mDataType == T_MAP; }
