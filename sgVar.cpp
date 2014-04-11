@@ -26,6 +26,11 @@ void sgVar::_release( void )
                 delete (int_type*)mData;
                 break;
             }
+        case T_INT64:
+            {
+                delete (int64_type*)mData;
+                break;
+            }
         case T_STRING:
             {
                 delete (char*)mData;
@@ -44,7 +49,9 @@ void sgVar::_release( void )
                 break;
             }
 		default:
-			break;
+            {
+			    break;
+            }
         }
     }
     mData = 0;
@@ -489,11 +496,8 @@ sgVar & sgVar::operator=( float v )
         _ref_count = 0;
     }
     _increase_ref();
-
-    double lv = (double)v;
-    mData = internal::data_cpy(lv);
-    if(mData)
-        mDataType = T_FLOAT;
+    
+    _initFloat(v);
 
     return *this;
 }
@@ -506,9 +510,7 @@ sgVar & sgVar::operator=( double v )
     }
     _increase_ref();
 
-    mData = internal::data_cpy(v);
-    if(mData)
-        mDataType = T_FLOAT;
+    _initFloat(v);
 
     return *this;
 }
