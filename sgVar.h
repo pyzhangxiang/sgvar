@@ -6,6 +6,15 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <cassert>
+
+#ifndef SGVAR_ASSERT
+#define SGVAR_ASSERT(x) assert(x)
+#endif
+
+#ifndef SGVAR_FAIL
+#define SGVAR_FAIL(msg) assert((0) && (msg))
+#endif
 
 class sgVar
 {
